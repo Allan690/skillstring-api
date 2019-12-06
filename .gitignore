@@ -63,13 +63,13 @@ typings/
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
-# next.js build output
+# next.js dev output
 .next
 
-# nuxt.js build output
+# nuxt.js dev output
 .nuxt
 
-# vuepress build output
+# vuepress dev output
 .vuepress/dist
 
 # Serverless directories
@@ -78,7 +78,7 @@ typings/
 # FuseBox cache
 .fusebox/
 
-# build folder
+# dev folder
 dist/
 .idea/
 .floo*

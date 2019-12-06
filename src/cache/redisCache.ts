@@ -10,7 +10,9 @@ class RedisCacheSingleton {
         if (RedisCacheSingleton.exists) {
             return RedisCacheSingleton.instance;
         }
-        this.client = redis.createClient(env.REDIS_URL);
+        this.client = redis.createClient(env.REDIS_URL, {
+            host: 'redis'
+        });
         this.client.getAsync = promisify(this.client.get);
         this.client.setAsync = promisify(this.client.set);
         this.client.setexAsync = promisify(this.client.setex);

@@ -3,7 +3,7 @@ import env from './environment';
 
 const s3 = new aws.S3({
     region: 'eu-west-2',
-    accessKeyId: env.AWS_ACCESS_KEY_ID,
+    accessKeyId: env.AWS_ACCESS_KEY,
     secretAccessKey: env.AWS_CLIENT_SECRET,
 });
 

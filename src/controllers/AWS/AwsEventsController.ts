@@ -16,6 +16,10 @@ interface awsPayload {
 }
 
 /**
+ * TODO: create function to handle approval of event subscriptions
+ */
+
+/**
  * @description synchronizes pdf files in database with aws bucket
  * @param request
  * @param response
@@ -43,7 +47,6 @@ export const handleAwsEvents = async function awsEventsHandler(request: express.
         });
     }
     catch(err) {
-        console.log(err);
         throw err;
     }
 };

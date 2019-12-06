@@ -50,7 +50,7 @@ export const validateRequestBody = (request: express.Request, response: express.
 
 export const validateGetRequestParams = (request: express.Request, response: express.Response, next: express.NextFunction) => {
     const schema = joi.object().keys({
-        documentUrl: joi.string().uri()
+        documentUrl: joi.string().uri().required()
     });
     return schemaValidation(request, response, next, schema, request.query)
 };
