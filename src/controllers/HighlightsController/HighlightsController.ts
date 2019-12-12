@@ -1,7 +1,7 @@
 import express from 'express';
 import { parse} from "path";
 import cache from "../../cache";
-import {saveDocumentHighlights, getAllHighlights, getHighlightsKey} from "../../services/Documents/DocumentService";
+import { saveDocumentHighlights, getAllHighlights, getHighlightsKey} from "../../services/Documents/DocumentService";
 
 /**
  * @description creates an instance of a highlight in a document
@@ -35,6 +35,12 @@ export const getHighlights = async function getHighlights(request: express.Reque
         const { documentName, documentCreator } = getOwnerAndNameFromUrl(documentUrl);
         const result = await cache.fetch(getHighlightsKey(documentCreator, documentName));
         const results = result ?? await getAllHighlights(documentName, documentCreator);
+        if(results.error) {
+            return response.status(404).json({
+                status: 'FileNotFound',
+                message: 'Requested document was not found'
+            });
+        }
         return response.status(200).json({
             status: 'success',
             results

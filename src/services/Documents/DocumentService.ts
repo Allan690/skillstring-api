@@ -56,7 +56,7 @@ export const getAllPdfObjects = async function getAllObjectsFromS3Bucket(bucket:
         const { Contents, IsTruncated, Name, Prefix, MaxKeys, CommonPrefixes, KeyCount } = alls3Objects;
         const filteredDocs = Contents.filter(obj => { return /^[^.]+.pdf$/.test(obj.Key)});
 
-        await cache.saveObject(cacheKey(env.AWS_ACCESS_KEY_ID), {
+        await cache.saveObject(cacheKey(env.AWS_ACCESS_KEY), {
             Contents: filteredDocs,
             IsTruncated,
             Name,
@@ -145,7 +145,9 @@ export const saveDocumentHighlights = async function saveHighlights(highlightBod
 export const getAllHighlights = async function getAllHighlights(key: string, owner: string) {
     try {
         const highlights = await documentModel.findOne({document_key: key, document_creator: owner });
-       // await cache.saveObject(getHighlightsKey(owner, key), highlights);
+        if(!highlights) {
+            return { error: 'NotFound' }
+        }
         return highlights.toJSON()
     }
     catch(err) {

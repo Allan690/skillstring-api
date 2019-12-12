@@ -12,7 +12,7 @@ import { cacheKey, getAllPdfObjects, saveFilteredObjects, removeDocument } from 
 export const getAllDocuments = async function getAllDocuments(request: express.Request, response: express.Response) {
     try {
         const { bucket, maxKeys } = request.query;
-        const pdfObjects = await cache.fetch(cacheKey(env.AWS_ACCESS_KEY_ID));
+        const pdfObjects = await cache.fetch(cacheKey(env.AWS_ACCESS_KEY));
         const {
             Contents,
             CommonPrefixes,
@@ -49,7 +49,7 @@ export const deleteDocument = async function deleteDocument(request: express.Req
     try {
         const { documentOwner, documentName } = request.query;
         const result = await removeDocument(documentOwner, documentName);
-        if(!response){
+        if(!result){
             return response.status(404).json({
                 status: 'NotFound',
                 message: 'Document was not found!'

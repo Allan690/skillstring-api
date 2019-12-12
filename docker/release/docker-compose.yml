@@ -1,0 +1,45 @@
+version: '3'
+volumes:
+  skillstring_data:
+    external: true
+services:
+  app:
+    image: 595258852940.dkr.ecr.eu-west-2.amazonaws.com/pdf-highlighter-api
+    build:
+      context: ../../
+      dockerfile: docker/release/Dockerfile
+    links:
+      - database
+      - redis
+    volumes:
+      - /usr/app/node_modules
+      - ../../:/usr/app
+    ports:
+      - '5000:5000'
+    environment:
+      - APP_PORT
+      - DATABASE_URL
+      - REDIS_URL
+      - AWS_ACCESS_KEY
+      - NODE_ENV
+      - AWS_CLIENT_SECRET
+    entrypoint:
+      - /usr/app/docker/release/entrypoint.sh
+    command:
+      - yarn
+      - entrypoint
+    depends_on:
+      - database
+      - redis
+  database:
+    image: mongo
+    container_name: mongo
+    volumes:
+      - skillstring_data:/data/mongodb
+    ports:
+      - "27017:27017"
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - '6380:6379'

@@ -4,7 +4,8 @@
   "main": "src/app.ts",
   "license": "MIT",
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "rm -rf dist",
+    "entrypoint": "chmod +x entrypoint.sh",
     "tsc": "ts-node-dev -r tsconfig-paths/register",
     "prebuild": "yarn clean",
     "build": "tsc -b tsconfig.build.json",
