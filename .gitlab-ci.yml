@@ -27,7 +27,7 @@ build:
   only:
     - branches
 
-deploy:
+deploy_staging:
   stage: deploy
   before_script:
     - 'which ssh-agent || ( apk update && apk add openssh-client )'
@@ -38,5 +38,23 @@ deploy:
     - chmod 700 ~/.ssh
   script:
     - ssh $STAGING_SERVER "ls && cd ~/pdf-highlight-api && git stash && git fetch --all && git reset --hard origin/staging && yarn && pm2 restart yarn && exit"
+  environment:
+    name: staging
   only:
     - staging
+
+deploy_production:
+  stage: deploy
+  before_script:
+    - 'which ssh-agent || ( apk update && apk add openssh-client )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY_PROD" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - chmod 700 ~/.ssh
+  script:
+    - ssh $PROD_SERVER "cd ~/pdf-highlight-api && git stash && git fetch --all && git reset --hard origin/master && yarn && pm2 restart yarn && exit"
+  environment:
+    name: production
+  only:
+    - master
